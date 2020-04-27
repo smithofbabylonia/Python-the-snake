@@ -15,15 +15,16 @@ class Grid:
 		self.size=size
 		self.area=585/size
 		self.level=0
+		self.head=None
 		for s in range(size):
 			e = []
 			for t in range(size):
 				e.append(Empty([s,t],self))
 			self.grid.append(e)
 		self.draw()
-		self.heading([vt,vt])
+		if game.gameMode!=4:
+			self.heading([vt,vt])
 		x= self.position()
-		self.grid[vt][vt]=self.head
 		self.grid[x[1]][x[0]]=Palet(x,self)
 		self.circle(self.grid[x[1]][x[0]])
  
@@ -58,6 +59,8 @@ class Grid:
 		self.grid[pos[1]][pos[0]]=self.head
 
 	def toDie(self,uh):
+		if uh[0]<0 or uh[1]<0 or uh[0]==self.size or uh[1]==self.size:
+			return True
 		if self.grid[uh[1]][uh[0]] in self.outOfbounds:
 			return True
 		x = self.head.snaking([])
@@ -67,7 +70,9 @@ class Grid:
 		return False
 
 	def position(self):
-		x = self.head.snaking([])
+		x=[[-1,-1]]
+		if self.head!=None:
+			x = self.head.snaking([])
 		why = True
 		a=0
 		b=0
@@ -78,6 +83,8 @@ class Grid:
 				if a==y[0] and b==y[1]:
 					break # to rand
 			if a==y[0] and b==y[1]:
+				why=True
+			elif self.grid[b][a] in self.outOfbounds:
 				why=True
 			else:
 				why=False

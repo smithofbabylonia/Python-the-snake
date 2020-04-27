@@ -41,10 +41,10 @@ class Game:
 		Obstacle(ting,self.grid)
 
 	def newloop(self):
-		for i in range(100):
+		for i in range(150):
 		#while True:
 			sc.update()
-			print("{0} moves".format(100-i))
+			print("{0} moves".format(150-i))
 			sec.sleep(0.5/self.rate)
 			self.grid.move(self.direcion)
 			sc.update()
@@ -56,19 +56,20 @@ class Game:
 					return 
 
 	def getObstacle(self,lvl):
+		hdng=True
 		fname="obstacles{0}.ofg".format(lvl)
 		rex = open(fname,"r")
 		fl = rex.read()
 		fl= fl.split("\n")
 		fl.pop(-1) # last string is empty
-		print(fl)
 		for les in fl:
 			les=les.split(",")
 			enn = []
 			enn.append(int(les[0]))
 			enn.append(int(les[1]))
-			if fl[0]==les:
+			if hdng:
 				self.grid.heading(enn)
+				hdng=False
 				continue
 			self.roudy(enn)
 		rex.close()
