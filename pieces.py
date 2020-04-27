@@ -18,6 +18,7 @@ class Head:
 	def __init__(self,pos,grid,lead):
 		self.pos=pos
 		self.grid=grid
+		grid.grid[pos[1]][pos[0]]=self
 		self.snake=None
 		self.lead=lead
 		self.color="Green"
@@ -58,5 +59,8 @@ class Head:
 		else:
 			self.snake.grow()
 
-class Palet(Empty):
-	pass
+class Palet:
+	def __init__(self,pos,grid):
+		self.pos=pos
+		self.grid=grid
+		grid.grid[pos[1]][pos[0]]=self

@@ -4,9 +4,10 @@ from random  import randint
 
 class Grid:
 
-	def __init__(self,size, ttl):
+	def __init__(self,game,size, ttl):
 		vt=int(size/2)
 		self.pen=ttl
+		self.game=game
 		self.origin =[-290,295]
 		self.grid=[]
 		self.outOfbounds=[]
@@ -14,18 +15,21 @@ class Grid:
 		self.size=size
 		self.area=585/size
 		self.level=0
-		self.head=Head([vt,vt],self,True)
-		self.head.grow()
 		for s in range(size):
 			e = []
 			for t in range(size):
 				e.append(Empty([s,t],self))
 			self.grid.append(e)
 		self.draw()
+		self.heading([vt,vt])
 		x= self.position()
 		self.grid[vt][vt]=self.head
 		self.grid[x[1]][x[0]]=Palet(x,self)
 		self.circle(self.grid[x[1]][x[0]])
+ 
+	def heading(self, pos):
+		self.head=Head(pos,self,True)
+		self.head.grow()
 
 	def eat(self):
 		if self.flag:
@@ -45,7 +49,8 @@ class Grid:
 		pos[0]+=chng[0]
 		pos[1]+=chng[1]
 		if self.toDie(pos):
-			self.__init__(self.size,self.pen)# use game's call to new grid
+			print("You died MF")
+			self.game.startGame(self.game.stage)
 			return
 		self.head.moveUp(pos)
 		if type(self.grid[pos[1]][pos[0]])==Palet:
