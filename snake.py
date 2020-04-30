@@ -21,6 +21,7 @@ class Game:
 		self.recomend=None
 		self.lives=4
 		self.stage=0
+		self.moves=0
 		self.direcion=[1,0]# going to the right
 		self.waiting=False
 		self.rate = 1
@@ -41,19 +42,25 @@ class Game:
 		Obstacle(ting,self.grid)
 
 	def newloop(self):
-		for i in range(150):
+		x=len(self.level)-self.stage
+		while self.moves<150:
 		#while True:
 			sc.update()
-			print("{0} moves".format(150-i))
+			self.moves+=1
+			print("{0} moves".format(150-self.moves))
 			sec.sleep(0.5/self.rate)
+			if self.gameMode==3 and self.moves%x==0:
+				self.grid.palet.moveUp()
 			self.grid.move(self.direcion)
-			sc.update()
 			self.waiting=False
+			sc.update()
 			self.total+=self.grid.eat()
 			sec.sleep(0.5/self.rate)
 			if self.gameMode==1:
 				if self.total==10:
-					return 
+					return
+		if self.gameMode==1:
+			self.play(0,0) #time ran out
 
 	def getObstacle(self,lvl):
 		hdng=True
@@ -91,20 +98,25 @@ class Game:
 		oc.end_fill()
 
 	def play(self,x,y):
-		print([x,y])
-		self.lives-=1
+		self.loseLife()
 		while self.stage<14: # make it a while loop
 			self.total=0
 			self.startGame(self.stage)
 			self.newloop()
 			self.rate+=0.5
 			self.stage+=1
+			self.moves=0
+
+	def loseLife(self):
+		self.lives-=1
 
 	def startGame(self,mode):# use this method in grid to reset grid 
 		self.grid=Grid(self,self.level[mode],ot)
+		print("stage {0} of game type #{1}\n{2} lives\nrefresh rate{3}\n{4} of 150 moves used".format(self.stage,self.gameMode,self.lives,self.rate,self.moves))
 		self.direcion=[1,0]
 		if self.gameMode==4:
 			self.getObstacle(mode)
+			self.grid.putPalet()
 		if self.lives<1:
 			self.stage=0
 			self.lives=4

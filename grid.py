@@ -1,5 +1,4 @@
 from pieces import *
-from random  import randint
 
 
 class Grid:
@@ -24,19 +23,29 @@ class Grid:
 		self.draw()
 		if game.gameMode!=4:
 			self.heading([vt,vt])
+			self.putPalet()
+
+	def putPalet(self):
 		x= self.position()
-		self.grid[x[1]][x[0]]=Palet(x,self)
+		self.palet=Palet(x,self)
 		self.circle(self.grid[x[1]][x[0]])
  
 	def heading(self, pos):
+		if self.grid[pos[1]][pos[0]].id==11: # dont put head on palet
+			print("crash")
+			pos[0]+=1
 		self.head=Head(pos,self,True)
 		self.head.grow()
+
+	def insert(self,obj):
+		x=obj.pos
+		self.grid[x[1]][x[0]]=obj
 
 	def eat(self):
 		if self.flag:
 			self.head.grow()
 			x= self.position()
-			self.grid[x[1]][x[0]]=Palet(x,self)
+			self.palet=Palet(x,self)
 			self.circle(self.grid[x[1]][x[0]])
 			self.flag=False
 			return 1
@@ -51,6 +60,7 @@ class Grid:
 		pos[1]+=chng[1]
 		if self.toDie(pos):
 			print("You died MF")
+			self.game.loseLife()
 			self.game.startGame(self.game.stage)
 			return
 		self.head.moveUp(pos)
