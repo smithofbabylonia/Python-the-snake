@@ -4,7 +4,7 @@ A game of snake written in python just because I love a good pun
 
 ## Installation
 
-Just plug and play mate
+Make sure to have version 3 python installed and have a GTK pack for turtle
 
 ## Usage
 
